@@ -1,5 +1,7 @@
 package com.demo.scala.files
 
+import com.demo.scala.filesystem.FileSystemException
+
 import scala.annotation.tailrec
 
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry])
@@ -7,9 +9,9 @@ class Directory(override val parentPath: String, override val name: String, val 
   def hasEntry(name: String): Boolean =
     findEntry(name) != null
 
-  def getAllFoldersInPath(): List[String] = {
+  def getAllFoldersInPath: List[String] = {
     // /a/b/c/d => [a,b,c,d]
-    path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.isEmpty)
+    path.substring(1).split(Directory.SEPARATOR).toList.filter(x => !x.nonEmpty)
   }
 
   def findDescendents(path: List[String]): Directory = {
@@ -36,6 +38,8 @@ class Directory(override val parentPath: String, override val name: String, val 
   override def asDirectory: Directory = this
 
   override def getType: String = "Directory"
+
+  override def asFile: File = throw new FileSystemException("A Directory cannot be converted to Directory")
 }
 
 object Directory {
