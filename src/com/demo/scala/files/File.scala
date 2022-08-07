@@ -4,6 +4,7 @@ import com.demo.scala.filesystem.FileSystemException
 
 class File(override val parentPath: String, override val name: String, contents: String)
   extends DirEntry(parentPath, name){
+
   override def asDirectory: Directory = throw new FileSystemException("A file cannot be converted to Directory!")
 
   override def getType: String = "File"
@@ -14,6 +15,9 @@ class File(override val parentPath: String, override val name: String, contents:
 
   override def isFile: Boolean = true
 
+  def setContents(newContents: String): File = new File(parentPath, name, newContents)
+
+  def appendContents(newContents: String): File = new File(parentPath, name, contents + "\n " + newContents)
 }
 
 object File {
